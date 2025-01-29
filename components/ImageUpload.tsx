@@ -1,4 +1,3 @@
-// app/components/ImageUpload.tsx
 'use client';
 
 import { CldUploadWidget } from 'next-cloudinary';
@@ -19,7 +18,7 @@ export default function ImageUpload({ onUploadSuccess, value }: ImageUploadProps
     <div className="flex flex-col gap-4">
       <CldUploadWidget 
         uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-        onUpload={handleUpload}
+        onSuccess={handleUpload}
       >
         {({ open }) => (
           <div className="flex flex-col gap-4">
