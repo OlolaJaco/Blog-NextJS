@@ -38,17 +38,3 @@ export async function POST(req: Request) {
         )
     }
 }
-
-export async function GET() {
-    try {
-        await connectToDatabase();
-        const posts = await Post.find().sort({ createdAt: -1 });
-
-        return NextResponse.json(posts);
-    } catch ( error: any ) {
-        return NextResponse.json(
-            { error: "Error fetching posts", details: error.message },
-            { status: 500 }
-        );
-    }
-}

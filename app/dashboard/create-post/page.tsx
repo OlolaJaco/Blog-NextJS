@@ -59,7 +59,7 @@ const page = () => {
         throw new Error(data.details || 'Failed to create post');
       }
 
-      router.push(`/post/${data.slug}`);
+      router.push(`/post/${data?.post?.slug}`);
       router.refresh();
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Something went wrong in handling submit');
