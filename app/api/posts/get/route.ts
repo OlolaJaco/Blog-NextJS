@@ -1,15 +1,18 @@
 import { Post } from '@/models/post.model';
 import connectToDatabase from '@/lib/mongodb/mongodb';
+import { NextRequest } from 'next/server';
 
-import { NextApiRequest } from 'next';
-
-export const POST = async (req: NextApiRequest) => {
+export async function POST(request: NextRequest) {
   await connectToDatabase();
-  const data = req.body;
+  
   try {
+    // Parse the JSON body from the request
+    const data = await request.json();
+    
     const startIndex = parseInt(data.startIndex) || 0;
     const limit = parseInt(data.limit) || 9;
     const sortDirection = data.order === 'asc' ? 1 : -1;
+
     const posts = await Post.find({
       ...(data.userId && { userId: data.userId }),
       ...(data.category &&
@@ -29,23 +32,19 @@ export const POST = async (req: NextApiRequest) => {
       .limit(limit);
 
     const totalPosts = await Post.countDocuments();
-
     const now = new Date();
-
     const oneMonthAgo = new Date(
       now.getFullYear(),
       now.getMonth() - 1,
       now.getDate()
     );
-
     const lastMonthPosts = await Post.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
 
-    return new Response(JSON.stringify({ posts, totalPosts, lastMonthPosts }), {
-      status: 200,
-    });
+    return Response.json({ posts, totalPosts, lastMonthPosts });
   } catch (error) {
-    console.log('Error getting posts:', error);
+    console.error('Error getting posts:', error);
+    return Response.json({ error: 'Internal Server Error' }, { status: 500 });
   }
-};
+}

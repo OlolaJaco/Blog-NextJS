@@ -1,5 +1,5 @@
 import CallToAction from "@/components/CallToAction";
-// import RecentPosts from '@/app/components/RecentPosts';
+import RecentPosts from '@/components/RecentPosts';
 import Link from "next/link";
 interface Params {
   slug: string;
@@ -64,7 +64,7 @@ export default async function PostPage({
         <div className="max-w-4xl mx-auto w-full">
           <CallToAction />
         </div>
-        {/* <RecentPosts limit={3} /> */}
+        <RecentPosts limit={3} />
       </section>
     </main>
   );
