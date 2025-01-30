@@ -1,7 +1,7 @@
 "use client";
-import ImageUpload from "@/components/ImageUpload";
-import dynamic from "next/dynamic";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+import ImageUpload from "@/components/ImageUpload";
 import { useRouter } from "next/navigation";
 
 const Editor = dynamic(() => import("@/components/editor/Editor"), {
@@ -24,7 +24,7 @@ const page = () => {
     setFormData((prevFormData) => ({ ...prevFormData, image: url }));
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -42,8 +42,30 @@ const page = () => {
       setError("Please upload an image");
       return;
     }
-    console.log(formData);
-    setLoading(false);
+
+    try {
+      setLoading(true);
+      const response = await fetch('/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.details || 'Failed to create post');
+      }
+
+      router.push(`/post/${data.slug}`);
+      router.refresh();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Something went wrong in handling submit');
+    } finally {
+      setLoading(false);
+    }
     console.log(formData);
   };
 

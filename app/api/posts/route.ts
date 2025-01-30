@@ -1,0 +1,54 @@
+import connectToDatabase from '@/lib/mongodb/mongodb';
+import { Post } from '@/models/post.model';
+import { NextResponse } from 'next/server';
+
+export async function POST(req: Request) {
+    try {
+        await connectToDatabase();
+        const data = await req.json();
+
+        const slug = data.title
+            .split(' ')
+            .join('-')
+            .toLowerCase()
+            .replace(/[^a-zA-Z0-9-]/g, '');
+
+        const post = await Post.create({
+            title: data.title,
+            content: data.content,
+            image: data.image,
+            category: data.category,
+            slug,
+        });
+        await post.save();
+
+        return NextResponse.json({
+            message: "Post created successfully",
+            post
+        });
+
+    } catch (error: any) {
+        console.error(error);
+        return NextResponse.json(
+            {
+                error: "Error creating post",
+                details: error.message
+            },
+            { status: 500}
+        )
+    }
+}
+
+export async function GET() {
+    try {
+        await connectToDatabase();
+        const posts = await Post.find().sort({ createdAt: -1 });
+
+        return NextResponse.json(posts);
+    } catch ( error: any ) {
+        return NextResponse.json(
+            { error: "Error fetching posts", details: error.message },
+            { status: 500 }
+        );
+    }
+}
