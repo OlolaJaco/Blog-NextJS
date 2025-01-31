@@ -3,8 +3,8 @@ import CallToAction from '@/components/CallToAction';
 import RecentPosts from '@/components/RecentPosts';
 
 export default async function Home() {
-  let posts = null;
   try {
+    let posts = null;
     const result = await fetch(process.env.URL + '/api/posts/get', {
       method: 'POST',
       body: JSON.stringify({ limit: 9, order: 'desc' }),

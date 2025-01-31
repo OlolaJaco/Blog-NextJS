@@ -72,7 +72,7 @@ export default async function PostPage({
         <div className="max-w-4xl mx-auto w-full">
           <CallToAction />
         </div>
-        <RecentPosts limit={3} />
+        <RecentPosts limit={4} />
       </section>
     </main>
   );

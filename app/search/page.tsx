@@ -36,7 +36,6 @@ export default function Search() {
     // Fetch posts based on URL parameters
     const fetchPosts = async () => {
       setLoading(true);
-      const searchQuery = urlParams.toString();
       const res = await fetch('/api/posts/get', {
         method: 'POST',
         headers: {
@@ -182,7 +181,7 @@ export default function Search() {
               onClick={handleShowMore}
               className='text-teal-500 text-lg hover:underline p-7 w-full'
             >
-              Show More
+              Search For More
             </button>
           )}
         </div>

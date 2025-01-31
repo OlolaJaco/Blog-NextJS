@@ -102,6 +102,11 @@ const NavBar = () => {
       </div>
 
       <div className="navbar-end space-x-6">
+
+        <Link href="/create-post" className="btn btn-neutral">
+          Create Post
+        </Link>
+
         {/* Theme Toggle */}
         <label className="swap swap-rotate">
           <input
