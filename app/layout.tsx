@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import { CldUploadWidget } from "next-cloudinary";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Olola Blog",
@@ -20,6 +21,9 @@ export default function RootLayout({
           <NavBar />
         </header>
         {children}
+        <footer>
+          <Footer />
+        </footer>
       </body>
     </html>
   );
