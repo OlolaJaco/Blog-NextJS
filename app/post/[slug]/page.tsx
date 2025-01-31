@@ -1,6 +1,7 @@
 import CallToAction from "@/components/CallToAction";
 import RecentPosts from '@/components/RecentPosts';
 import Link from "next/link";
+
 interface Params {
   slug: string;
 }
@@ -10,9 +11,11 @@ export default async function PostPage({
 }: {
   params: Promise<Params>;
 }) {
+  // Await the params to get the slug
   const resolvedParams = await params;
   let post = null;
   try {
+    // Fetch the post data from the API
     const result = await fetch(process.env.URL + "/api/posts/get", {
       method: "POST",
       body: JSON.stringify({ slug: resolvedParams.slug }),
@@ -21,8 +24,11 @@ export default async function PostPage({
     const data = await result.json();
     post = data.posts[0];
   } catch (error) {
+    // Handle any errors that occur during the fetch
     post = { title: "Failed to load post" };
   }
+
+  // If the post is not found, display a "Post not found" message
   if (!post || post.title === "Failed to load post") {
     return (
       <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
@@ -32,6 +38,8 @@ export default async function PostPage({
       </main>
     );
   }
+
+  // Render the post content
   return (
     <main className="bg-base-100 text-base-content">
       <section className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen bg-base-100">
