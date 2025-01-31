@@ -1,8 +1,30 @@
-"use client"
+"use client";
 
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const NavBar = () => {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchParams = useSearchParams();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(searchParams);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    router.push(`/search?${searchQuery}`);
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(searchParams);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [searchParams]);
+
   return (
     <nav className="navbar bg-base-100 text-base-content">
       <div className="navbar-start">
@@ -36,13 +58,17 @@ const NavBar = () => {
             <li>
               <Link href="/project">Project</Link>
             </li>
-            <div className="form-control">
-              <input
-                type="text"
-                placeholder="Search"
-                className="input input-bordered w-24 md:w-auto"
-              />
-            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="form-control">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="input input-bordered w-24 md:w-auto"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </form>
           </ul>
         </div>
         <Link href="/" className="btn btn-ghost text-xl">
@@ -51,13 +77,17 @@ const NavBar = () => {
       </div>
 
       <div className="navbar-center hidden lg:flex">
-        <div className="form-control">
-          <input
-            type="text"
-            placeholder="Search"
-            className="input input-bordered w-24 md:w-auto"
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-control">
+            <input
+              type="text"
+              placeholder="Search"
+              className="input input-bordered w-24 md:w-auto"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </form>
         <ul className="menu menu-horizontal px-1">
           <li>
             <Link href="/">Home</Link>
@@ -74,7 +104,11 @@ const NavBar = () => {
       <div className="navbar-end space-x-6">
         {/* Theme Toggle */}
         <label className="swap swap-rotate">
-          <input type="checkbox" className="theme-controller" value="business" />
+          <input
+            type="checkbox"
+            className="theme-controller"
+            value="business"
+          />
           {/* Sun Icon */}
           <svg
             className="swap-off h-10 w-10 fill-current"
