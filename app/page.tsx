@@ -1,19 +1,8 @@
 import Link from 'next/link';
 import CallToAction from '@/components/CallToAction';
 import RecentPosts from '@/components/RecentPosts';
-import Image from 'next/image';
 
 export default async function Home() {
-  try {
-    const result = await fetch(process.env.URL + '/api/posts/get', {
-      method: 'POST',
-      body: JSON.stringify({ limit: 9, order: 'desc' }),
-      cache: 'no-store',
-    });
-    const data = await result.json();
-  } catch (error) {
-    console.log('Error getting post:', error);
-  }
   return (
     <div className='flex flex-col justify-center items-center bg-base-100 text-base-content'>
       <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto '>

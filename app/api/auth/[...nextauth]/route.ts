@@ -30,7 +30,7 @@ const handler = NextAuth({
                         throw new Error("Invalid password");
                     }
                     return user;
-                } catch (error) {
+                } catch {
                    return null; 
                 }
             }
