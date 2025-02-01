@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import Image from 'next/image'; // Import Image component from next/image
+
 interface Post {
   slug: string;
   image: string;
@@ -10,10 +12,13 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <div className='group relative w-full border border-teal-500 hover:border-2 h-[400px] overflow-hidden rounded-lg sm:w-[430px] transition-all'>
       <Link href={`/post/${post.slug}`}>
-        <img
+        <Image
           src={post.image}
           alt='post cover'
-          className='h-[260px] w-full  object-cover group-hover:h-[200px] transition-all duration-300 z-20'
+          layout='responsive'
+          width={430}
+          height={260}
+          className='h-[260px] w-full object-cover group-hover:h-[200px] transition-all duration-300 z-20'
         />
       </Link>
       <div className='p-3 flex flex-col gap-2'>

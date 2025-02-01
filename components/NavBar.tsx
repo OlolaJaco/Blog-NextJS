@@ -72,7 +72,7 @@ const NavBar = () => {
           </ul>
         </div>
         <Link href="/" className="btn btn-ghost text-xl">
-          Jaco's Blog
+          Jaco&apos;s Blog
         </Link>
       </div>
 

@@ -27,14 +27,14 @@ export async function POST(req: Request) {
             post
         });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error(error);
         return NextResponse.json(
             {
                 error: "Error creating post",
-                details: error.message
+                details: (error as Error).message
             },
-            { status: 500}
-        )
+            { status: 500 }
+        );
     }
 }

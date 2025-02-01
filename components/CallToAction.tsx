@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function CallToAction() {
   return (
     // Main container with flex properties and styling
@@ -16,7 +18,12 @@ export default function CallToAction() {
             </button>
         </div>
         <div className="p-7 flex-1">
-            <img src="https://bairesdev.mo.cloudinary.net/blog/2023/08/What-Is-JavaScript-Used-For.jpg" />
+            <Image 
+              src="https://bairesdev.mo.cloudinary.net/blog/2023/08/What-Is-JavaScript-Used-For.jpg" 
+              alt="JavaScript Projects" 
+              width={600} 
+              height={400} 
+            />
         </div>
     </div>
   )

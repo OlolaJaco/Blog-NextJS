@@ -1,6 +1,7 @@
 import CallToAction from "@/components/CallToAction";
 import RecentPosts from '@/components/RecentPosts';
 import Link from "next/link";
+import Image from "next/image";
 
 interface Params {
   slug: string;
@@ -23,7 +24,7 @@ export default async function PostPage({
     });
     const data = await result.json();
     post = data.posts[0];
-  } catch (error) {
+  } catch {
     // Handle any errors that occur during the fetch
     post = { title: "Failed to load post" };
   }
@@ -54,10 +55,12 @@ export default async function PostPage({
             {post && post.category}
           </button>
         </Link>
-        <img
+        <Image
           src={post && post.image}
           alt={post && post.title}
           className="mt-10 p-3 max-h-[600px] w-full object-cover"
+          width={600}
+          height={400}
         />
         <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
           <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>

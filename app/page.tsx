@@ -1,17 +1,16 @@
 import Link from 'next/link';
 import CallToAction from '@/components/CallToAction';
 import RecentPosts from '@/components/RecentPosts';
+import Image from 'next/image';
 
 export default async function Home() {
   try {
-    let posts = null;
     const result = await fetch(process.env.URL + '/api/posts/get', {
       method: 'POST',
       body: JSON.stringify({ limit: 9, order: 'desc' }),
       cache: 'no-store',
     });
     const data = await result.json();
-    posts = data.posts;
   } catch (error) {
     console.log('Error getting post:', error);
   }

@@ -9,7 +9,7 @@ const Editor = dynamic(() => import("@/components/editor/Editor"), {
   loading: () => <p>Loading editor...</p>,
 });
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -162,4 +162,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

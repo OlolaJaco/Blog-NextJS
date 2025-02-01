@@ -9,9 +9,17 @@ type ImageUploadProps = {
   value?: string;
 };
 
+type UploadResult = {
+  info?: {
+    secure_url?: string;
+  } | string;
+};
+
 export default function ImageUpload({ onUploadSuccess, value }: ImageUploadProps) {
-  const handleUpload = useCallback((result: any) => {
-    onUploadSuccess(result.info.secure_url);
+  const handleUpload = useCallback((result: UploadResult) => {
+    if (typeof result.info !== 'string' && result.info?.secure_url) {
+      onUploadSuccess(result.info.secure_url);
+    }
   }, [onUploadSuccess]);
 
   return (

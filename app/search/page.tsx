@@ -4,6 +4,16 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import PostCard from '@/components/PostCard';
 
+interface Post {
+  _id: string;
+  title: string;
+  content: string;
+  category: string;
+  createdAt: string;
+  slug: string;
+  image: string;
+}
+
 export default function Search() {
   const [sidebarData, setSidebarData] = useState({
     searchTerm: '',
@@ -11,7 +21,7 @@ export default function Search() {
     category: 'uncategorized',
   });
 
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const searchParams = useSearchParams();
@@ -25,12 +35,12 @@ export default function Search() {
 
     // Update sidebar data with URL parameters
     if (searchTermFromUrl || sortFromUrl || categoryFromUrl) {
-      setSidebarData({
-        ...sidebarData,
+      setSidebarData((prevSidebarData) => ({
+        ...prevSidebarData,
         searchTerm: searchTermFromUrl || '',
         sort: sortFromUrl || 'desc',
         category: categoryFromUrl || 'uncategorized',
-      });
+      }));
     }
 
     // Fetch posts based on URL parameters
@@ -64,7 +74,7 @@ export default function Search() {
       }
     };
     fetchPosts();
-  }, [searchParams]);
+  }, [searchParams, sidebarData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     if (e.target.id === 'searchTerm') {
@@ -89,8 +99,7 @@ export default function Search() {
     urlParams.set('searchTerm', sidebarData.searchTerm);
     urlParams.set('sort', sidebarData.sort);
     urlParams.set('category', sidebarData.category);
-    const searchQuery = urlParams.toString();
-    router.push(`/search?${searchQuery}`);
+    router.push(`/search?${urlParams.toString()}`);
   };
 
   const handleShowMore = async () => {
@@ -98,7 +107,6 @@ export default function Search() {
     const startIndex = numberOfPosts;
     const urlParams = new URLSearchParams(searchParams);
     urlParams.set('startIndex', startIndex.toString());
-    const searchQuery = urlParams.toString();
     const res = await fetch('/api/post/get', {
       method: 'POST',
       headers: {
