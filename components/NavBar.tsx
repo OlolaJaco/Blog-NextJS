@@ -2,11 +2,32 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
 const NavBar = () => {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NavBarContent
+        router={router}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
+    </Suspense>
+  );
+};
+
+const NavBarContent = ({
+  router,
+  searchTerm,
+  setSearchTerm,
+}: {
+  router: ReturnType<typeof useRouter>;
+  searchTerm: string;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const searchParams = useSearchParams();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
