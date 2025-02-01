@@ -44,7 +44,7 @@ const NavBarContent = ({
     if (searchTermFromUrl) {
       setSearchTerm(searchTermFromUrl);
     }
-  }, [searchParams]);
+  }, [searchParams, setSearchTerm]);
 
   return (
     <nav className="navbar bg-base-100 text-base-content">
