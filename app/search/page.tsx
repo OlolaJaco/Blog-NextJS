@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import PostCard from '@/components/PostCard';
 
@@ -35,7 +35,7 @@ export default function Search() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const fetchPosts = async (startIndex?: number) => {
+  const fetchPosts = useCallback(async (startIndex?: number) => {
     setLoading(true);
     try {
       const res = await fetch('/api/posts/get', {
@@ -70,7 +70,7 @@ export default function Search() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [sidebarData]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
