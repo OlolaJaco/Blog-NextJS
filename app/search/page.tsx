@@ -28,7 +28,7 @@ export default function Search() {
   const router = useRouter();
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(searchParams);
+    const urlParams = new URLSearchParams(searchParams?.toString() || '');
     const searchTermFromUrl = urlParams.get('searchTerm');
     const sortFromUrl = urlParams.get('sort');
     const categoryFromUrl = urlParams.get('category');
@@ -74,7 +74,8 @@ export default function Search() {
       }
     };
     fetchPosts();
-  }, [searchParams, sidebarData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     if (e.target.id === 'searchTerm') {
@@ -95,7 +96,7 @@ export default function Search() {
     if (!sidebarData.searchTerm) {
       sidebarData.searchTerm = '';
     }
-    const urlParams = new URLSearchParams(searchParams);
+    const urlParams = new URLSearchParams(searchParams?.toString() || '');
     urlParams.set('searchTerm', sidebarData.searchTerm);
     urlParams.set('sort', sidebarData.sort);
     urlParams.set('category', sidebarData.category);
@@ -105,7 +106,7 @@ export default function Search() {
   const handleShowMore = async () => {
     const numberOfPosts = posts.length;
     const startIndex = numberOfPosts;
-    const urlParams = new URLSearchParams(searchParams);
+    const urlParams = new URLSearchParams(searchParams?.toString() || '');
     urlParams.set('startIndex', startIndex.toString());
     const res = await fetch('/api/post/get', {
       method: 'POST',
