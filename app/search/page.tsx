@@ -32,8 +32,8 @@ export default function Search() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
-  const searchParams = typeof window !== 'undefined' ? useSearchParams() : null;
-  const router = typeof window !== 'undefined' ? useRouter() : null;
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const fetchPosts = async (startIndex?: number) => {
     setLoading(true);
@@ -73,7 +73,7 @@ export default function Search() {
   };
 
   useEffect(() => {
-    if (searchParams) {
+    if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(searchParams.toString());
       const searchTermFromUrl = urlParams.get('searchTerm');
       const sortFromUrl = urlParams.get('sort') as 'desc' | 'asc';
@@ -87,7 +87,7 @@ export default function Search() {
 
       fetchPosts();
     }
-  }, [searchParams]);
+  }, [searchParams, fetchPosts]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
