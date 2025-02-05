@@ -9,7 +9,7 @@ export default async function RecentPosts({ limit }: RecentPostsProps) {
 
   try {
     // Fetch recent posts from the API
-    const result = await fetch(`${process.env.URL}/api/posts/get`, {
+    const result = await fetch(`${process.env.URL_lINK}/api/posts/get`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
