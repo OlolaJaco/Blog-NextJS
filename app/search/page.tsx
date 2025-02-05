@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, Suspense, useCallback } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import PostCard from '@/components/PostCard';
 
@@ -35,7 +35,7 @@ export default function Search() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const fetchPosts = useCallback(async (startIndex?: number) => {
+  const fetchPosts = async (startIndex?: number) => {
     setLoading(true);
     try {
       const res = await fetch('/api/posts/get', {
@@ -70,24 +70,22 @@ export default function Search() {
     } finally {
       setLoading(false);
     }
-  }, [sidebarData]);
+  };
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(searchParams.toString());
-      const searchTermFromUrl = urlParams.get('searchTerm');
-      const sortFromUrl = urlParams.get('sort') as 'desc' | 'asc';
-      const categoryFromUrl = urlParams.get('category');
+    const urlParams = new URLSearchParams(searchParams?.toString() || '');
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    const sortFromUrl = urlParams.get('sort') as 'desc' | 'asc';
+    const categoryFromUrl = urlParams.get('category');
 
-      setSidebarData({
-        searchTerm: searchTermFromUrl || '',
-        sort: sortFromUrl || 'desc',
-        category: categoryFromUrl || 'uncategorized',
-      });
+    setSidebarData({
+      searchTerm: searchTermFromUrl || '',
+      sort: sortFromUrl || 'desc',
+      category: categoryFromUrl || 'uncategorized',
+    });
 
-      fetchPosts();
-    }
-  }, [searchParams, fetchPosts]);
+    fetchPosts();
+  }, [searchParams]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
@@ -99,13 +97,11 @@ export default function Search() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (router) {
-      const urlParams = new URLSearchParams();
-      urlParams.set('searchTerm', sidebarData.searchTerm);
-      urlParams.set('sort', sidebarData.sort);
-      urlParams.set('category', sidebarData.category);
-      router.push(`/search?${urlParams.toString()}`);
-    }
+    const urlParams = new URLSearchParams();
+    urlParams.set('searchTerm', sidebarData.searchTerm);
+    urlParams.set('sort', sidebarData.sort);
+    urlParams.set('category', sidebarData.category);
+    router.push(`/search?${urlParams.toString()}`);
   };
 
   const handleShowMore = () => {
