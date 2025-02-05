@@ -32,8 +32,8 @@ export default function Search() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const searchParams = typeof window !== 'undefined' ? useSearchParams() : null;
+  const router = typeof window !== 'undefined' ? useRouter() : null;
 
   const fetchPosts = async (startIndex?: number) => {
     setLoading(true);
@@ -73,18 +73,20 @@ export default function Search() {
   };
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(searchParams?.toString() || '');
-    const searchTermFromUrl = urlParams.get('searchTerm');
-    const sortFromUrl = urlParams.get('sort') as 'desc' | 'asc';
-    const categoryFromUrl = urlParams.get('category');
+    if (searchParams) {
+      const urlParams = new URLSearchParams(searchParams.toString());
+      const searchTermFromUrl = urlParams.get('searchTerm');
+      const sortFromUrl = urlParams.get('sort') as 'desc' | 'asc';
+      const categoryFromUrl = urlParams.get('category');
 
-    setSidebarData({
-      searchTerm: searchTermFromUrl || '',
-      sort: sortFromUrl || 'desc',
-      category: categoryFromUrl || 'uncategorized',
-    });
+      setSidebarData({
+        searchTerm: searchTermFromUrl || '',
+        sort: sortFromUrl || 'desc',
+        category: categoryFromUrl || 'uncategorized',
+      });
 
-    fetchPosts();
+      fetchPosts();
+    }
   }, [searchParams]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -97,11 +99,13 @@ export default function Search() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const urlParams = new URLSearchParams();
-    urlParams.set('searchTerm', sidebarData.searchTerm);
-    urlParams.set('sort', sidebarData.sort);
-    urlParams.set('category', sidebarData.category);
-    router.push(`/search?${urlParams.toString()}`);
+    if (router) {
+      const urlParams = new URLSearchParams();
+      urlParams.set('searchTerm', sidebarData.searchTerm);
+      urlParams.set('sort', sidebarData.sort);
+      urlParams.set('category', sidebarData.category);
+      router.push(`/search?${urlParams.toString()}`);
+    }
   };
 
   const handleShowMore = () => {
